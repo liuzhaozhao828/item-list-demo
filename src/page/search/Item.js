@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './page.less'
 import share from '../../assets/share.svg'
-import tianmao from '../../assets/tianmao.svg'
+import tianmao from '../../assets/tm.svg'
 
 function Item({item}){
 
