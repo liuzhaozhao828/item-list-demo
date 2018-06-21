@@ -13,13 +13,11 @@ const Layout = props => {
   return (
     <div>
       {/*<NavBar*/}
-        {/*mode="dark"*/}
-        {/*className={styles.barColor}*/}
-        {/*style={{ backgroundColor: "#f59417" }}*/}
+        {/*mode="light"*/}
         {/*icon={*/}
-          {/*(props.pathname === "/main" || props.pathname === "/") ?null: (*/}
+          {/*(props.pathname === "/Search" || props.pathname === "/") ?null: (*/}
             {/*<Icon type="left" />*/}
-          {/*) */}
+          {/*)*/}
         {/*}*/}
         {/*onLeftClick={() => {*/}
           {/*//这里需要做指定式跳转，手机页面会涉及到用户刷新的问题*/}

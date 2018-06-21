@@ -8,7 +8,7 @@ export function config() {
     },
     initialState: {
       global: {
-        text: 'hi umi + dva',
+        text: '宝贝搜索',
       },
     },
   };

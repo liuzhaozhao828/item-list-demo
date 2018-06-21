@@ -14,6 +14,7 @@ let all = Mock.mock({
       "image": "https://img.alicdn.com/bao/uploaded/i4/3383106209/TB2keOcpKGSBuNjSspbXXciipXa_!!3383106209-0-item_pic.jpg",
       "itemId": "@id",
       "itemUrl": "https://item.taobao.com/item.htm?id=563727702689",
+      "jumpPage": "https://item.taobao.com/item.htm?id=551812857209",
       "priceByCoupon": "8.90",
       "profit": "0.24",
       "shareUrl": "http://www.lazytest.cn/detail.htm?taowords=Imij0DgHYoK&pic=aHR0cHM6Ly9pbWcuYWxpY2RuLmNvbS9iYW8vdXBsb2FkZWQvaTQvMzM4MzEwNjIwOS9UQjJrZU9jcEtHU0J1TmpTc3BiWFhjaWlwWGFfISEzMzgzMTA2MjA5LTAtaXRlbV9waWMuanBn&url=http://of9.cn/yg5ex",

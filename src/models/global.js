@@ -5,7 +5,7 @@ const { prefix } = config;
 export default {
   namespace: "global",
   state: {
-    text: "Title"
+    text: "text"
   },
 
   subscriptions: {

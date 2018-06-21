@@ -67,7 +67,7 @@ class Search extends Component {
         title: '综合排序',
         key: 'multiple'
       },{
-        title: '佣金比率',
+        title: '返利比率',
         key: 'commissionRate'
       },{
         title: '价格',
@@ -148,6 +148,7 @@ class Search extends Component {
         </div>
         <div className={styles["item-list"]}>
           <List list={list}
+                total={totalCount}
                 clear={clearList}
                 onQuery={(pageAdd=false)=>{
                   if(pageAdd) {

@@ -2,6 +2,7 @@ import React from 'react'
 import styles from './page.less'
 import share from '../../assets/share.svg'
 import tianmao from '../../assets/tm.svg'
+import Link from 'umi/link';
 
 function Item({item}){
 
@@ -12,22 +13,40 @@ function Item({item}){
     </div>)
   }
 
-  const {image, title, viewPrice, soldVolume, priceByCoupon, couponsLeft, couponAmount, profit} = item
-  return(<div className={styles.item}>
-    <img src={image} alt={title} className={styles.img}/>
-    <div className={styles.detail}>
-      <p className={styles["detail-title"]}> <img src={tianmao} />{title}</p>
-      <p className={styles["detail-info"]}><span>现价：{viewPrice}</span><span>已售：{soldVolume}</span></p>
-      <p className={styles["detail-info"]}><span>券后价: </span><span className={styles['detail-info-price']}>{priceByCoupon}</span></p>
-      <Coupon value={couponAmount}/><span className={styles["detail-info"]}>剩余{couponsLeft}张</span>
-    </div>
-    <div className={styles.share}>
-      <div className={styles["share-box"]}>
-        <img src={share} />
+  const {image, title, viewPrice, soldVolume, priceByCoupon, couponsLeft, couponAmount, profit, jumpPage} = item
+  return(
+      <div className={styles.item} onClick={()=>{
+        window.location.href=jumpPage
+      }}>
+        <img src={image} alt={title} className={styles.img}/>
+        <div className={styles.detail}>
+          <p className={styles["detail-title"]}>
+            <img src={tianmao} />
+            {title}
+          </p>
+          <p className={styles["detail-info"]}><span>现价：{viewPrice}</span>{`  `}<span>已售：{soldVolume}</span></p>
+          {
+            parseInt(couponAmount)>0 &&
+            <p className={styles["detail-info"]}><span>券后价: </span><span className={styles['detail-info-price']}>{priceByCoupon}</span></p>
+          }
+          {
+            parseInt(couponAmount)>0 &&
+            <Coupon value={couponAmount}/>
+          }
+          {
+            parseInt(couponAmount)>0 &&
+            <span className={styles["detail-info"]}>剩余{couponsLeft}张</span>
+          }
+
+        </div>
+        <div className={styles.share}>
+          <div className={styles["share-box"]}>
+            <img src={share} />
+          </div>
+          <p>省 ￥{profit}</p>
+        </div>
       </div>
-      <p>赚 ￥{profit}</p>
-    </div>
-  </div>)
+    )
 
 }
 

@@ -78,8 +78,9 @@ class ItemList extends React.Component {
 
 
   genData = (pIndex = 0, length)=>{
+    const {total} = this.props
     let len = NUM_SECTIONS;
-    if(length<NUM_SECTIONS){
+    if(length<NUM_SECTIONS||(sectionIDs.length+length>=total)){
       len = length
       this.setState({
         hasMore: false
@@ -151,7 +152,7 @@ class ItemList extends React.Component {
         ref={el => this.lv = el}
         dataSource={this.state.dataSource}
         renderFooter={() => (<div style={{ padding: 30, textAlign: 'center' }}>
-          {this.state.hasMore?(this.state.isLoading ? <Icon type={'loading'} /> : ''):'end'}
+          {this.state.hasMore?(this.state.isLoading ? <Icon type={'loading'} /> : ''):'--The end--'}
         </div>)}
         renderBodyComponent={() => <MyBody />}
         renderRow={row}
