@@ -63,7 +63,7 @@ class ItemList extends React.Component {
     if(clear){
       this.clear()
     }
-    if (nextProps.list !== this.props.list) {
+    if (list.length!==0 && list !== this.props.list) {
       setTimeout(() => {
         this.genData(pageIndex++, list.length);
         this.setState({

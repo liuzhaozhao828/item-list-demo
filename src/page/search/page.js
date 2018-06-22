@@ -20,7 +20,7 @@ class Search extends Component {
   }
 
   getItemList =(values)=>{
-    console.warn('values',values)
+    //console.warn('values',values)
     const params ={
       pageNo: 1,
       pageSize: 10,
