@@ -52,7 +52,7 @@ class ItemList extends React.Component {
     this.setState({
       height: hei,
     });
-    this.props.onQuery()
+    //this.props.onQuery()
   }
 
   // If you use redux, the data maybe at props, you need use `componentWillReceiveProps`
@@ -110,7 +110,7 @@ class ItemList extends React.Component {
     }
     console.log('reach end', event);
     this.setState({ isLoading: true });
-    this.props.onQuery(true)
+    this.props.onQuery()
 
   }
 

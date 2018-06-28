@@ -19,6 +19,13 @@ class Search extends Component {
     searchFocus: false,
   }
 
+  componentDidMount(){
+    const { title= '' } = this.props.match.params;
+    this.setState({
+      value: title
+    }, ()=>this.getItemList())
+  }
+
   getItemList =(values)=>{
     //console.warn('values',values)
     const params ={
@@ -150,16 +157,12 @@ class Search extends Component {
           <List list={list}
                 total={totalCount}
                 clear={clearList}
-                onQuery={(pageAdd=false)=>{
-                  if(pageAdd) {
-                    this.setState({
-                      clearList: false
-                    }, ()=>{
-                      this.getItemList({pageNo: pageNo+1})
-                    })
-                  }else {
-                    this.getItemList()
-                  }
+                onQuery={()=>{
+                  this.setState({
+                    clearList: false
+                  }, ()=>{
+                    this.getItemList({pageNo: pageNo+1})
+                  })
                 }}/>
         </div>
       </div>

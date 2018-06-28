@@ -1,2 +1,2 @@
-import Search from './search/page';
+import Search from './search/$title$';
 export default Search;
