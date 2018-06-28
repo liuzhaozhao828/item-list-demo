@@ -59,11 +59,16 @@ class ItemList extends React.Component {
   componentWillReceiveProps(nextProps) {
     //console.warn('nextProps',nextProps)
     const data = this.state.data||[]
-    const {list =[], clear=false} = nextProps
+    const {list =[], clear=false, total} = nextProps
+    if(total=="0"){
+      this.setState({
+        isLoading: false,
+      })
+    }
     if(clear){
       this.clear()
     }
-    if (list.length!==0 && list !== this.props.list) {
+    if (list.length!==0 && list !== this.props.list && total>0) {
       setTimeout(() => {
         this.genData(pageIndex++, list.length);
         this.setState({
@@ -130,6 +135,14 @@ class ItemList extends React.Component {
 
   render() {
     const {data:list} = this.state
+    const {total} = this.props
+
+    let endText=<Icon type={'loading'} />
+    if(total===0){
+      endText = "无结果"
+    }else {
+      endText = this.state.hasMore?(this.state.isLoading ? <Icon type={'loading'} /> : ''):'没有更多内容了'
+    }
 
 
     const separator = (sectionID, rowID) => (
@@ -152,7 +165,7 @@ class ItemList extends React.Component {
         ref={el => this.lv = el}
         dataSource={this.state.dataSource}
         renderFooter={() => (<div style={{ padding: 30, textAlign: 'center' }}>
-          {this.state.hasMore?(this.state.isLoading ? <Icon type={'loading'} /> : ''):'--The end--'}
+          {endText}
         </div>)}
         renderBodyComponent={() => <MyBody />}
         renderRow={row}

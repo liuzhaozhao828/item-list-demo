@@ -14,6 +14,7 @@ class Search extends Component {
     value: '',
     sortBy: 'multiple',
     hasCoupon: true,
+    isTmall: true,
 
     clearList: true,
     searchFocus: false,
@@ -33,6 +34,7 @@ class Search extends Component {
       pageSize: 10,
       sortBy: this.state.sortBy,
       hasCoupon: this.state.hasCoupon,
+      isTmall: this.state.isTmall,
       title: this.state.value
     }
     request({url: "/api/rebate/queryRebate.htm",method:"post",params:{...params, ...values}}).then(({data:{code, desc, ...data}})=>{
@@ -65,8 +67,8 @@ class Search extends Component {
 
   render(){
 
-    const { itemList={},queryList=[], value, sortBy, hasCoupon, clearList, searchFocus } = this.state
-    const {totalCount = 0, pageNo = 1, pageSize =10, data:list=[]} = itemList
+    const { itemList={},queryList=[], value, sortBy, hasCoupon, isTmall, clearList, searchFocus } = this.state
+    const {totalCount = -1, pageNo = 1, pageSize =10, data:list=[]} = itemList
 
     const Sort=()=>{
 
@@ -153,6 +155,19 @@ class Search extends Component {
                     }}/>
           </div>
         </div>
+        <div className={styles["filter-coupon"]}>
+          <span>仅显示优天猫商品</span>
+          <div className={styles["query-switch"]}>
+            <Switch checked={isTmall}
+                    color={'#ff8919'}
+                    className={`am-switch my-switch`}
+                    onChange={(value)=>{
+                      this.setState({
+                        isTmall: value
+                      }, this.getNewList)
+                    }}/>
+          </div>
+        </div>
         <div className={styles["item-list"]}>
           <List list={list}
                 total={totalCount}
@@ -197,7 +212,7 @@ class Search extends Component {
             mode="light"
             //icon={<Icon type="left" />}
             //onLeftClick={() => console.log('onLeftClick')}
-          >宝贝搜索</NavBar>
+          >返利侠搜索</NavBar>
         </div>
         <div>
           <SearchBar

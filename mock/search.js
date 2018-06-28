@@ -43,4 +43,11 @@ export default {
         "小包纸巾 便携式 古龙"
       ]})
   },
+  'POST /api/rebate/getJumpPage.htm': (req, res)=> {
+    res.json({
+      code: '000000',
+      desc: "success",
+      jumpPage: "http://www.lazytest.cn/ali/detail.do?taowords=Sc3S0B0hVqY&pic=aHR0cHM6Ly9pbWcuYWxpY2RuLmNvbS9iYW8vdXBsb2FkZWQvaTEvMjYxNTY1MDI5Mi9UQjFWQnQ2amY2VEJLTmpTWkppWFhiS1ZGWGFfISEwLWl0ZW1fcGljLmpwZw",
+    })
+  },
 };

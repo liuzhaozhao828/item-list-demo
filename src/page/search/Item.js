@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './page.less'
 import share from '../../assets/share.svg'
 import tianmao from '../../assets/tm.svg'
-import Link from 'umi/link';
+import request from '../../utils/request';
 
 function Item({item}){
 
@@ -13,10 +13,15 @@ function Item({item}){
     </div>)
   }
 
-  const {image, title, viewPrice, soldVolume, priceByCoupon, couponsLeft, couponAmount, profit, jumpPage} = item
+  const {image, title, shareUrl, viewPrice, soldVolume, priceByCoupon, couponsLeft, couponAmount, profit } = item
   return(
       <div className={styles.item} onClick={()=>{
-        window.location.href=jumpPage
+        request({url: "/api/rebate/getJumpPage.htm",method:"post",params:{image, title, shareUrl}}).then(({data:{code, desc, jumpPage}})=>{
+          if(jumpPage){
+            window.location.href=jumpPage
+          }
+        })
+
       }}>
         <img src={image} alt={title} className={styles.img}/>
         <div className={styles.detail}>
