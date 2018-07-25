@@ -11,7 +11,7 @@ import sort from '../../assets/sort.svg'
 class Search extends Component {
 
   state={
-    value: '',
+    title: '',
     sortBy: 'multiple',
     hasCoupon: true,
     isTmall: true,
@@ -21,10 +21,31 @@ class Search extends Component {
   }
 
   componentDidMount(){
-    const { title= '' } = this.props.match.params;
-    this.setState({
-      value: title
-    }, ()=>this.getItemList())
+    let content = []
+    let query = {}
+    if(window.sessionStorage){
+      content = JSON.parse(sessionStorage.getItem('content')||"[]")
+      query = JSON.parse(sessionStorage.getItem('query')||"{}")
+    }
+    if(content.length>0){
+      const {pageNo, pageSize, totalCount, ...params} = query
+      this.setState({
+        ...params,
+        itemList: {
+          pageNo,
+          pageSize,
+          totalCount,
+          data: content,
+          cache: true,
+        },
+      })
+    }else {
+      const { title= '' } = this.props.match.params;
+      this.setState({
+        title: title
+      }, ()=>this.getItemList())
+    }
+
   }
 
   getItemList =(values)=>{
@@ -35,17 +56,23 @@ class Search extends Component {
       sortBy: this.state.sortBy,
       hasCoupon: this.state.hasCoupon,
       isTmall: this.state.isTmall,
-      title: this.state.value
+      title: this.state.title
     }
     request({url: "/api/rebate/queryRebate.htm",method:"post",params:{...params, ...values}}).then(({data:{code, desc, ...data}})=>{
       this.setState({
         itemList: data
       })
+      if(window.sessionStorage){
+        const content = JSON.parse(sessionStorage.getItem('content')||"[]")
+        const { data: list=[], totalCount=0 } = data
+        sessionStorage.setItem('content',JSON.stringify([...content,...list]))
+        sessionStorage.setItem('query',JSON.stringify({...params, ...values, totalCount}))
+      }
     })
   }
 
   getQueryList=()=>{
-    request({url: "/api/rebate/queryTitles.htm",method:"post",params:{title: this.state.value}}).then(({data:{code, desc, data}})=>{
+    request({url: "/api/rebate/queryTitles.htm",method:"post",params:{title: this.state.title}}).then(({data:{code, desc, data}})=>{
       this.setState({
         queryList: data
       })
@@ -67,8 +94,8 @@ class Search extends Component {
 
   render(){
 
-    const { itemList={},queryList=[], value, sortBy, hasCoupon, isTmall, clearList, searchFocus } = this.state
-    const {totalCount = -1, pageNo = 1, pageSize =10, data:list=[]} = itemList
+    const { itemList={},queryList=[], title, sortBy, hasCoupon, isTmall, clearList, searchFocus } = this.state
+    const {totalCount = -1, pageNo = 1, pageSize =10, data:list=[], cache= false} = itemList
 
     const Sort=()=>{
 
@@ -170,6 +197,8 @@ class Search extends Component {
         </div>
         <div className={styles["item-list"]}>
           <List list={list}
+                pageNo={pageNo}
+                cache={cache}
                 total={totalCount}
                 clear={clearList}
                 onQuery={()=>{
@@ -193,7 +222,7 @@ class Search extends Component {
                  onClick={()=>{
                    this.setState({
                      searchFocus: false,
-                     value:item
+                     title:item
                    }, ()=>{
                      this.getNewList()
                    })
@@ -218,7 +247,7 @@ class Search extends Component {
           <SearchBar
             className="am-search my-search"
             placeholder="关键字"
-            value={value}
+            value={title}
             onFocus={() => {
               this.setState({searchFocus: true, clearList: false});
               this.getQueryList()

@@ -17,9 +17,7 @@ function MyBody(props) {
 const NUM_SECTIONS = 10;
 let pageIndex = 0;
 
-let dataBlobs = {};
-let sectionIDs = [];
-let rowIDs = [];
+let dataBlob = {};
 
 
 
@@ -59,7 +57,7 @@ class ItemList extends React.Component {
   componentWillReceiveProps(nextProps) {
     //console.warn('nextProps',nextProps)
     const data = this.state.data||[]
-    const {list =[], clear=false, total} = nextProps
+    const {list =[], clear=false, total, cache} = nextProps
     if(total=="0"){
       this.setState({
         isLoading: false,
@@ -70,41 +68,69 @@ class ItemList extends React.Component {
     }
     if (list.length!==0 && list !== this.props.list && total>0) {
       setTimeout(() => {
-        this.genData(pageIndex++, list.length);
+        this.genData(list.length);
         this.setState({
-          dataSource: this.state.dataSource.cloneWithRowsAndSections(dataBlobs, sectionIDs, rowIDs),
+          dataSource: this.state.dataSource.cloneWithRows(dataBlob),
           isLoading: false,
           data:[...data,...list]
         });
       }, 1000);
     }
+    if(cache&&window.sessionStorage){
+      const location = sessionStorage.getItem('location')
+      setTimeout(() => {console.warn('scroll');this.lv.scrollTo(0, location)}, 1000);
+    }
+
   }
 
 
 
-  genData = (pIndex = 0, length)=>{
-    const {total} = this.props
-    let len = NUM_SECTIONS;
-    if(length<NUM_SECTIONS||(sectionIDs.length+length>=total)){
-      len = length
+  // genData = (pIndex = 0, length)=>{
+  //   const {total} = this.props
+  //   let len = NUM_SECTIONS;
+  //   if(length<NUM_SECTIONS||(sectionIDs.length+length>=total)){
+  //     len = length
+  //     this.setState({
+  //       hasMore: false
+  //     })
+  //   }
+  //   for (let i = 0; i < len; i++) {
+  //     const ii = (pIndex * NUM_SECTIONS) + i;
+  //     const sectionName = `Section ${ii}`;
+  //     sectionIDs.push(sectionName);
+  //     dataBlobs[sectionName] = sectionName;
+  //     rowIDs[ii] = [];
+  //
+  //     const rowName = `S${ii}`;
+  //     rowIDs[ii].push(rowName);
+  //     dataBlobs[rowName] = rowName;
+  //   }
+  //   sectionIDs = [...sectionIDs];
+  //   rowIDs = [...rowIDs];
+  //
+  // }
+
+  genData=(length)=>{
+    const {total,pageNo, cache} = this.props
+    pageIndex = pageNo
+    const len = length
+    if((((pageNo*1)*NUM_SECTIONS)>=total)){
       this.setState({
         hasMore: false
       })
     }
-    for (let i = 0; i < len; i++) {
-      const ii = (pIndex * NUM_SECTIONS) + i;
-      const sectionName = `Section ${ii}`;
-      sectionIDs.push(sectionName);
-      dataBlobs[sectionName] = sectionName;
-      rowIDs[ii] = [];
-
-      const rowName = `S${ii}`;
-      rowIDs[ii].push(rowName);
-      dataBlobs[rowName] = rowName;
+    if(cache){
+      for (let i = 0; i < len; i++) {
+        dataBlob[`${i}`] = `row - ${i}`;
+      }
+    }else {
+      for (let i = 0; i < len; i++) {
+        const ii = (pageIndex * NUM_SECTIONS) + i;
+        dataBlob[`${ii}`] = `row - ${ii}`;
+      }
     }
-    sectionIDs = [...sectionIDs];
-    rowIDs = [...rowIDs];
 
+    dataBlob ={...dataBlob};
   }
 
   onEndReached = (event) => {
@@ -121,12 +147,10 @@ class ItemList extends React.Component {
 
   clear=()=>{
     setTimeout(() => {
-      dataBlobs = {};
-      sectionIDs = [];
-      rowIDs = [];
       pageIndex = 0
+      dataBlob={}
       this.setState({
-        dataSource: this.state.dataSource.cloneWithRowsAndSections(dataBlobs, sectionIDs, rowIDs),
+        dataSource: this.state.dataSource.cloneWithRows(dataBlob),
         isLoading: true,
         data:[]
       });
@@ -135,7 +159,7 @@ class ItemList extends React.Component {
 
   render() {
     const {data:list} = this.state
-    const {total} = this.props
+    const {total, cache} = this.props
 
     let endText=<Icon type={'loading'} />
     if(total===0){
@@ -150,11 +174,11 @@ class ItemList extends React.Component {
         key={`${sectionID}-${rowID}`}
       />
     );
-    let index = NUM_SECTIONS*(pageIndex - 1);
+    let index = cache?0:NUM_SECTIONS*(pageIndex - 1);
     const row = (rowData, sectionID, rowID) => {
       const obj = list[index++]||{};
       return (
-        <div key={rowID}>
+        <div key={rowID} id={index}>
           <Item item={obj}/>
         </div>
       );
@@ -175,12 +199,15 @@ class ItemList extends React.Component {
           overflow: 'auto',
         }}
         pageSize={4}
-        //onScroll={() => { console.log('scroll'); }}
+        onScroll={(e) => {
+          if(window.sessionStorage){
+            sessionStorage.setItem('location', e.target.scrollTop)
+          }
+        }}
         scrollRenderAheadDistance={500}
         onEndReached={this.onEndReached}
         onEndReachedThreshold={10}
       />
-
     );
   }
 }
