@@ -39,7 +39,9 @@ class ItemList extends React.Component {
       isLoading: true,
       height: document.documentElement.clientHeight * 3 / 4,
       data: [],
-      hasMore: true
+      hasMore: true,
+
+      cache:false,
     };
   }
 
@@ -72,7 +74,8 @@ class ItemList extends React.Component {
         this.setState({
           dataSource: this.state.dataSource.cloneWithRows(dataBlob),
           isLoading: false,
-          data:[...data,...list]
+          data:[...data,...list],
+          cache,
         });
       }, 1000);
     }
@@ -127,7 +130,7 @@ class ItemList extends React.Component {
       }
     }else {
       for (let i = 0; i < len; i++) {
-        const ii = (pageIndex * NUM_SECTIONS) + i;
+        const ii = ((pageIndex-1) * NUM_SECTIONS) + i;
         dataBlob[`${ii}`] = `row - ${ii}`;
       }
     }
@@ -160,8 +163,8 @@ class ItemList extends React.Component {
   }
 
   render() {
-    const {data:list} = this.state
-    const {total, cache} = this.props
+    const {data:list, cache} = this.state
+    const {total} = this.props
 
     let endText=<Icon type={'loading'} />
     if(total===0){

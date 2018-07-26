@@ -28,7 +28,7 @@ class Search extends Component {
       content = JSON.parse(sessionStorage.getItem('content')||"[]")
       query = JSON.parse(sessionStorage.getItem('query')||"{}")
     }
-    if(title===query.title && content.length>0){
+    if(content.length>0){
       const {pageNo, pageSize, totalCount, ...params} = query
       this.setState({
         ...params,
@@ -85,6 +85,11 @@ class Search extends Component {
   }
 
   getNewList=(values)=>{
+    if(window.sessionStorage){
+      sessionStorage.removeItem('content')
+      sessionStorage.removeItem('query')
+      sessionStorage.removeItem('location')
+    }
     this.setState({
       clearList: true,
     }, ()=>{
