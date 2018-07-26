@@ -93,8 +93,8 @@ class Search extends Component {
   }
 
 
-  onChange= (value) => {
-    this.setState({ value }, this.getQueryList);
+  onChange= (title) => {
+    this.setState({ title }, this.getQueryList);
   };
 
   render(){
