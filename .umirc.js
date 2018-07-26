@@ -1,4 +1,5 @@
 export default {
   plugins: ['umi-plugin-dva'],
-  hd:true  
+  hd:true,
+  hashHistory: true
 }

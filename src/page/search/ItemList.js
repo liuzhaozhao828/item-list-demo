@@ -78,7 +78,9 @@ class ItemList extends React.Component {
     }
     if(cache&&window.sessionStorage){
       const location = sessionStorage.getItem('location')
-      setTimeout(() => {console.warn('scroll');this.lv.scrollTo(0, location)}, 1000);
+      setTimeout(()=>{
+          this.lv.scrollTo(0, location)
+        }, 2000)
     }
 
   }
@@ -188,6 +190,7 @@ class ItemList extends React.Component {
       <ListView
         ref={el => this.lv = el}
         dataSource={this.state.dataSource}
+        initialListSize={this.state.data.length||NUM_SECTIONS}
         renderFooter={() => (<div style={{ padding: 30, textAlign: 'center' }}>
           {endText}
         </div>)}

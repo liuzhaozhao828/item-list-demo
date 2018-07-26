@@ -23,11 +23,12 @@ class Search extends Component {
   componentDidMount(){
     let content = []
     let query = {}
+    const { title= '' } = this.props.match.params;
     if(window.sessionStorage){
       content = JSON.parse(sessionStorage.getItem('content')||"[]")
       query = JSON.parse(sessionStorage.getItem('query')||"{}")
     }
-    if(content.length>0){
+    if(title===query.title && content.length>0){
       const {pageNo, pageSize, totalCount, ...params} = query
       this.setState({
         ...params,
@@ -40,7 +41,11 @@ class Search extends Component {
         },
       })
     }else {
-      const { title= '' } = this.props.match.params;
+      if(window.sessionStorage){
+        sessionStorage.removeItem('content')
+        sessionStorage.removeItem('query')
+        sessionStorage.removeItem('location')
+      }
       this.setState({
         title: title
       }, ()=>this.getItemList())

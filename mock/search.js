@@ -27,7 +27,7 @@ let all = Mock.mock({
 
 export default {
   'POST /api/rebate/queryRebate.htm': (req, res)=> {
-    let {pageNo = 1, pageSize = 10} = req.params;
+    let {pageNo = 1, pageSize = 10} = req.body;
     pageNo *= 1;
     pageSize *= 1;
     let list = all.items;

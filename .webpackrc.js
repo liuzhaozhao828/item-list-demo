@@ -8,11 +8,11 @@ export default {
         themes:path.resolve(__dirname,'src/themes'),
         images:path.resolve(__dirname,'src/assets')
     },
-    // proxy: {
-    //     "/api/v1/th": {
-    //       "target": "http://url",
-    //       "changeOrigin": true,
-    //       "pathRewrite": { "^/api/v1/th": "" }
-    //     },
-    //   },
+    proxy: {
+        "/api": {
+          "target": "http://10.9.10.59",
+          "changeOrigin": true,
+          //"pathRewrite": { "^/api/v1/th": "" }
+        },
+      },
 }
