@@ -10,7 +10,7 @@ export default {
     },
     proxy: {
         "/api": {
-          "target": "http://10.9.10.59",
+          "target": "http://10.9.10.47",
           "changeOrigin": true,
           //"pathRewrite": { "^/api/v1/th": "" }
         },

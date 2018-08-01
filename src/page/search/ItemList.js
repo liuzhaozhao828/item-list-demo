@@ -59,7 +59,7 @@ class ItemList extends React.Component {
   componentWillReceiveProps(nextProps) {
     //console.warn('nextProps',nextProps)
     const data = this.state.data||[]
-    const {list =[], clear=false, total, cache} = nextProps
+    const {list =[], clear=false, total, cache, pageNo} = nextProps
     if(total=="0"){
       this.setState({
         isLoading: false,
@@ -76,6 +76,7 @@ class ItemList extends React.Component {
           isLoading: false,
           data:[...data,...list],
           cache,
+          hasMore: (((pageNo*1)*NUM_SECTIONS)>=total)? false: true
         });
       }, 1000);
     }
@@ -117,13 +118,9 @@ class ItemList extends React.Component {
 
   genData=(length)=>{
     const {total,pageNo, cache} = this.props
+    console.warn('pageNo',pageNo)
     pageIndex = pageNo
     const len = length
-    if((((pageNo*1)*NUM_SECTIONS)>=total)){
-      this.setState({
-        hasMore: false
-      })
-    }
     if(cache){
       for (let i = 0; i < len; i++) {
         dataBlob[`${i}`] = `row - ${i}`;
